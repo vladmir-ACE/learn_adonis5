@@ -25,8 +25,11 @@ import UserdbsController from 'App/Controllers/Http/UserdbsController'
 Route.get( '/listUser', "UserdbsController.index")
 Route.get( '/listUser/:id','UserdbsController.show')
 Route.post( '/addUser',"UserdbsController.store")
+Route.post( '/login',"UserdbsController.login")
 Route.put( '/updateUser/:id', "UserdbsController.update")
 Route.delete( '/deleteUser/:id', "UserdbsController.delete")
+Route.get( '/logout','UserdbsController.logout')
+Route.get( '/showLoginUser','UserdbsController.showUserLogin')
 
 // book
 Route.post( '/addBook', "BookdbsController.store")

@@ -1,18 +1,22 @@
 import Userdb from "App/Models/Userdb";
 
+
 export default class UserdbService{
 
-    // save User
+    // save or register a  User
     async create(data:any) {
     const newUser:Userdb= new  Userdb();
              newUser.nom=data.nom;
              newUser.prenom= data.prenom;
              newUser.age= data.age;
              newUser.sexe= data.sexe;
+             newUser.email=data.email;
+             newUser.tel=data.tel;
+             newUser.password=data.password;
   
             try {
-            await newUser.save();
-            return  newUser;
+            const user =await Userdb.create(newUser)
+            return  user;
             } catch (error) {
 
             return {status:'server_error',message : "erreur serveur"}
@@ -20,6 +24,13 @@ export default class UserdbService{
             }
   
         }
+        //login 
+
+
+        
+
+
+      
   
         // Liste User
         async liste() {

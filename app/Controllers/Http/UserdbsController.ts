@@ -4,6 +4,7 @@
 import { HttpContext } from "@adonisjs/core/build/standalone";
 import Userdb from "App/Models/Userdb";
 import UserdbService from "App/Services/UserdbService";
+import LoginValidator from "App/Validators/LoginValidator";
 import UserdbValidator from "App/Validators/UserdbValidator";
 
 export default class UserdbsController {
@@ -44,13 +45,100 @@ export default class UserdbsController {
     if(user?.status === 'server_error'){
       return response.status(500).json(user)
 
+    }    
+  }
+
+
+
+  async login({auth , request , response}) {
+    // save user
+        
+    const data= await request.validate(LoginValidator);
+    console.log(data);
+
+
+
+    try {
+      if (data.email!=null) {
+         const token= await auth.use('api').attempt(data.email, data.password,{
+          expiresIn: '2 mins'
+         })
+         
+         return response.send(
+          {
+            status:'succes',
+            message:'user success login',
+            token:token
+          }
+         )  
+      }
+      else if(data.tel!=null){
+     const token= await auth.use('api').attempt(data.tel, data.password)
+       
+         return response.send(
+          {
+            status:'succes',
+            message:'user success login',
+            token:token
+          }
+         )  
+      }
+    } catch (error) {
+      return response.badRequest('Invalid credentials')      
     }
 
-        
     
   }
 
-  async show({response,params}: HttpContext) {
+
+
+  async logout({auth,response}){
+
+    try{
+      await auth.use("api").revoke()
+      return response.send({
+        message:"user logout",
+      
+      })
+
+    }
+    catch{
+      return response.status(500).json({ status: 'server_error', message: "erreur serveur" });
+    }
+
+
+  }
+
+
+  async showUserLogin({auth,response}){
+
+    try {
+      const userLoged=auth.user;
+      if(userLoged){
+        return response.send({
+          message:"user login",
+          user:userLoged
+        })
+      }
+      else{
+        return response.send({
+          message:"no user login",
+          
+        })
+      }
+
+    
+
+    } catch (error) {
+      return response.status(500).json({ status: 'server_error', message: "erreur serveur" });
+    }
+
+  }
+
+
+  
+
+  async show({ auth ,response,params}) {
     // return user by id
     
     const idUser:number= params.id;
