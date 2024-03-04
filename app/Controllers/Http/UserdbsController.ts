@@ -56,8 +56,6 @@ export default class UserdbsController {
     const data= await request.validate(LoginValidator);
     console.log(data);
 
-
-
     try {
       if (data.email!=null) {
          const token= await auth.use('api').attempt(data.email, data.password,{

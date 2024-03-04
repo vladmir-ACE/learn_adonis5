@@ -32,9 +32,10 @@ Route.get( '/logout','UserdbsController.logout')
 Route.get( '/showLoginUser','UserdbsController.showUserLogin')
 
 // book
-Route.post( '/addBook', "BookdbsController.store")
-Route.post( 'user/:id/addBook', "BookdbsController.addByUser")
-Route.get( '/listBook/', "BookdbsController.index")
-Route.get( '/listBook/:id', "BookdbsController.show")
-Route.put('updateBook/:id',"BookdbsController.update")
-Route.delete("/deleteBook/:id","BookdbsController.delete")
+Route.post( '/addBook', "BookdbsController.store").middleware('auth')
+Route.post( 'user/:id/addBook', "BookdbsController.addByUser").middleware('auth')
+Route.get( '/listBook/', "BookdbsController.index").middleware('auth')
+Route.get( '/listBook/:id', "BookdbsController.show").middleware('auth')
+Route.put('updateBook/:id',"BookdbsController.update").middleware('auth')
+Route.delete("/deleteBook/:id","BookdbsController.delete").middleware('auth')
+
